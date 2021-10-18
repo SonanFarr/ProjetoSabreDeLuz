@@ -7,40 +7,37 @@
  #include <avr/power.h>
 #endif
 
-// DEFINIÇÕES DE PINOS
+// DEFINIÇÕES DE PINOS --------------------------------------------------------------------------------
+
 #define pinRx 10
 #define pinTx 11
-
 #define pinBot 2
-
 #define pinSensor 4
-
 #define pinLed 6
 
-// DEFINIÇÕES
+// DEFINIÇÕES -----------------------------------------------------------------------------------------
+
 #define volumeMP3 20
 #define NUMPIXELS 123
-
 #define DEBUG
-// INSTANCIANDO OBJETOS
+
+// INSTANCIANDO OBJETOS -------------------------------------------------------------------------------
+
 SoftwareSerial playerMP3Serial(pinRx, pinTx);
 Adafruit_NeoPixel pixels(NUMPIXELS, pinLed, NEO_GRB + NEO_KHZ800);
-
 DFRobotDFPlayerMini playerMP3;
 
-// DECLARAÇÃO DE FUNÇÕES
-
-
-// DECLARAÇÃO DE VARIÁVEIS
+// DECLARAÇÃO DE VARIÁVEIS ---------------------------------------------------------------------------
 
 int control = 0;
 int botao;
-
 int esq1 = 123;
-int dir1 = 0;
 int esq2 = 123;
+int dir1 = 0;
 int dir2 = 0;
 int cor = 127;
+
+// SETUP --------------------------------------------------------------------------------------------
 
 void setup() {
 	Serial.begin(9600);
@@ -76,10 +73,14 @@ void setup() {
   pixels.begin();
 }
 
+//LOOP ----------------------------------------------------------------------------------------------
+
 void loop() {
 
   botao = digitalRead(pinBot);
-    
+
+  // Operação de acionamento do sabre.
+  // Executa o som de ligar e acende os leds conforme o padrão especificado.    
   if(botao == 0 && control == 0){
     playerMP3.playFolder(1, 3);
     Serial.println("Tocando pasta 01, musica 003");
@@ -119,13 +120,9 @@ void loop() {
     cor = 127;
     delay(1000);
   }
-
-  //if(botao == 0){
-    //playerMP3.playFolder(1, 2);
-    //Serial.println("Tocando pasta 01, musica 002");
-    //delay(1000);
-  //}
-
+  
+  // Operação de desligamento do sabre.
+  // Executa o som de desligar e apaga os leds conforme o padrão especificado.
   if(botao == 1 && control == 1){
     playerMP3.playFolder(1, 1);
     Serial.println("Tocando pasta 01, musica 001");
@@ -149,11 +146,11 @@ void loop() {
     delay(1000);
   }
   
+  // Operação de execução do som de movimento.
+  // Quando o sensor é acionado, executa o som de movimento do sabre.
   if(digitalRead(pinSensor) == HIGH && !digitalRead(pinBot)){
     playerMP3.playFolder(1, 5);
     Serial.println("Tocando pasta 01, musica 005");
     delay(1000);
   }
 }
-
-//Testando o Git
